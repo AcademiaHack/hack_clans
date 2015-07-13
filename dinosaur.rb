@@ -16,8 +16,4 @@ class Dinosaur < Character
     SpecialAction.new "Terremoto!!", 3, {health: 30, defense: 0, push: 1}
   end
 
-  def sprint!
-    #Avanza 2 posiciones y ataca -6 puntos de la salud de un oponente. 3 Cooldown
-  end
-
 end

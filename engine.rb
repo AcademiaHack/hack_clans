@@ -31,12 +31,17 @@ class Engine
   end
 
   def execute_special action, char, oponent
-    oponent.health -= action.effect[:health]
-    oponent.defense -= action.effect[:defense]
-    if action.effect[:push] > 0
-      oponent.rotate
-      move_player oponent
-      oponent.rotate
+    if(char.special_action_used? action)
+      puts "MOVIMIENTO ERRADO: #{char.name} especial en cooldown".red
+    else
+      oponent.health -= action.effect[:health]
+      oponent.defense -= action.effect[:defense]
+      if action.effect[:push] > 0
+        oponent.rotate
+        move_player oponent
+        oponent.rotate
+      end
+      char.push_special_action action
     end
   end
 
@@ -49,11 +54,14 @@ class Engine
     if(boundaries_check next_postion)
       tile = self.board.get next_postion
       if tile.type_of == "Character"
-          if oponent.defense > 5
+          if oponent.defense > 20
+            oponent.health -= damage - 10
+          elsif oponent.defense > 5
             oponent.health -= damage - 3
           else
             oponent.health -= damage
           end
+          oponent.defense -= 1
       end
     end
 
@@ -77,6 +85,10 @@ class Engine
 
   def rest_player char
     char.health += 2
+  end
+
+  def rest_defense_player char
+    char.defense += 2
   end
 
   def detect_tile char
@@ -119,6 +131,10 @@ class Engine
     when :rest
       rest_player char
       puts "El jugador #{char.name} descansa en este turno".colorize(char.color)
+    when :rest_full
+      rest_player char
+      rest_defense_player char
+      puts "El jugador #{char.name} descansa health y defensa! en este turno".colorize(char.color)
     else
       if action.class.name == "SpecialAction"
         execute_special(action, char, oponent)
@@ -143,7 +159,9 @@ class Engine
     system "clear"
     puts "\n-----------------------------------------------------------------".blue
     print "#{char1.name} health #{char1.health}     ".colorize char1.color
-    puts "#{char2.name} health #{char2.health}".colorize char2.color
+    puts "#{char2.name}  health #{char2.health}".colorize char2.color
+    print "             defense #{char1.defense}".colorize char1.color
+    puts "     defense #{char2.defense}".colorize char2.color
     puts "\n-----------------------------------------------------------------\n".blue
   end
 
@@ -153,6 +171,7 @@ class Engine
     puts "Turno de #{actual_char.name}".colorize actual_char.color
     action = actual_char.turn
     do_action action, actual_char, oponent_char
+    actual_char.refresh_special_actions
     self.board.draw
     puts "\n-----------------------------------------------------------------\n".colorize actual_char.color
     sleep 1

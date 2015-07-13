@@ -56,6 +56,30 @@ class Character
     end
   end
 
+  def push_special_action action
+    @special_actions.push action
+  end
+
+  def special_action_used? action
+    @special_actions.each do |special_action|
+      if special_action && special_action.name = action.name
+        return true
+      end
+    end
+    return false
+  end
+
+  def refresh_special_actions
+    @special_actions.map! do |special_action|
+      if special_action && special_action.wait > 0
+        special_action.wait += - 1
+        special_action
+      elsif special_action && special_action.wait == 0
+        nil
+      end
+    end
+  end
+
   def turn
   end
 end

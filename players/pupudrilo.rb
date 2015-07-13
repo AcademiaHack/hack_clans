@@ -12,6 +12,7 @@ class Pupudrilo < Dinosaur
       else
         @count += 1
         self.rotate
+        self.roar!
       end
     end
   end
