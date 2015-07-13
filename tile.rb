@@ -9,6 +9,10 @@ class Tile
     @content && @content == "_"
   end
 
+  def type_of
+    @content.class.ancestors[2].name
+  end
+
   def to_s
     @content.to_s
   end

@@ -6,7 +6,7 @@ class Perrodactilo < Dinosaur
     if tile && tile.empty?
       self.move!
     else
-      self.rotate
+      self.attack!
     end
   end
 end

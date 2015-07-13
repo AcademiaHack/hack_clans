@@ -29,6 +29,19 @@ class Engine
     self.board.get(position).empty?
   end
 
+  def attack_player char, oponent
+    actual_position = self.board.find_character char
+    next_postion = actual_position + char.side
+
+    if(boundaries_check next_postion)
+      tile = self.board.get next_postion
+      if tile.type_of == "Character"
+          oponent.health -= 10
+      end
+    end
+
+  end
+
   def move_player char
     actual_position = self.board.find_character char
     next_postion = actual_position + char.side
@@ -72,14 +85,14 @@ class Engine
     titles
   end
 
-  def do_action action, char
+  def do_action action, char, oponent
     case action
-    when 1 || -1
-      puts "Rotando player!"
+    when :free_action
+      puts "Accion gratuita"
     when :move
       move_player char
-    when :detect
-      detect_tile char
+    when :attack
+      attack_player char, oponent
     else
       puts "La accion #{action} no es reconocida!"
     end
@@ -90,15 +103,17 @@ class Engine
       self.board.draw
 
       action = self.char1.turn
-      do_action action, char1
+      do_action action, char1, char2
       puts "Turno de #{char1.name_test}"
+      puts "Health #{char1.health}"
 
       action = self.char2.turn
-      do_action action, char2
+      do_action action, char2, char1
       puts "Turno de #{char2.name_test}"
+      puts "Health #{char2.health}"
 
       sleep 2
-      break unless action
+      break if !action || self.char1.health < 0 || self.char2.health < 0
     end
   end
 end
