@@ -1,11 +1,14 @@
 class Character
-  attr_accessor :health, :side, :sight, :name_test
+  attr_accessor :health, :defense, :side, :sight, :name, :color, :special_actions
 
-  def initialize name_test, context
-    @name_test = name_test
+  def initialize name, color, context
+    @name = name
     @sight = 3
     @health = 100
+    @defense = 10
     @side = 1
+    @special_actions = []
+    @color = color
 
     @context = context
   end
@@ -17,7 +20,7 @@ class Character
     elsif @side == -1
       @side = 1
     end
-    :free_action
+    :rotate
   end
 
   def detect
@@ -28,6 +31,11 @@ class Character
   def look
     #detectar las tres casillas frente al char
     @context.look_titles self
+  end
+
+  def rest!
+    #recuperar 2 de health
+    :rest
   end
 
   def attack!
@@ -42,9 +50,9 @@ class Character
 
   def to_s
     if @side == 1
-      "#{@name_test}>"
+      "#{@name}".colorize(self.color) + ">".red
     elsif @side == -1
-      "<#{@name_test}"
+      "<".red + "#{@name}".colorize(self.color)
     end
   end
 

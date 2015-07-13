@@ -1,3 +1,4 @@
+require 'colorize'
 require_relative 'board'
 
 class Engine
@@ -29,14 +30,30 @@ class Engine
     self.board.get(position).empty?
   end
 
+  def execute_special action, char, oponent
+    oponent.health -= action.effect[:health]
+    oponent.defense -= action.effect[:defense]
+    if action.effect[:push] > 0
+      oponent.rotate
+      move_player oponent
+      oponent.rotate
+    end
+  end
+
   def attack_player char, oponent
+    damage = 10
+
     actual_position = self.board.find_character char
     next_postion = actual_position + char.side
 
     if(boundaries_check next_postion)
       tile = self.board.get next_postion
       if tile.type_of == "Character"
-          oponent.health -= 10
+          if oponent.defense > 5
+            oponent.health -= damage - 3
+          else
+            oponent.health -= damage
+          end
       end
     end
 
@@ -51,11 +68,15 @@ class Engine
         self.board.blank actual_position
         self.board.place_character(char, next_postion)
       else
-        puts "Casilla ocupada!"
+        puts "MOVIMIENTO ERRADO: #{char.name} no se puede mover a una casilla ocupada".red
       end
     else
-      puts "Pared detectada!"
+      puts "MOVIMIENTO ERRADO: #{char.name} no se puede mover a una casilla fuera del tablero".red
     end
+  end
+
+  def rest_player char
+    char.health += 2
   end
 
   def detect_tile char
@@ -64,7 +85,7 @@ class Engine
     if(boundaries_check next_postion)
       self.board.get(next_postion)
     else
-      puts "Siguiente casilla fuera del tablero!"
+      puts "El jugador #{char.name} detecta un limite en el tablero".colorize(char.color)
     end
   end
 
@@ -87,33 +108,75 @@ class Engine
 
   def do_action action, char, oponent
     case action
-    when :free_action
-      puts "Accion gratuita"
+    when :rotate
+      puts "El jugador #{char.name} se voltea!".colorize(char.color)
     when :move
       move_player char
+      puts "El jugador #{char.name} se mueve en este turno".colorize(char.color)
     when :attack
       attack_player char, oponent
+      puts "El jugador #{char.name} hace un".colorize(char.color) + " ataque ".red + "normal en este turno".colorize(char.color)
+    when :rest
+      rest_player char
+      puts "El jugador #{char.name} descansa en este turno".colorize(char.color)
     else
-      puts "La accion #{action} no es reconocida!"
+      if action.class.name == "SpecialAction"
+        execute_special(action, char, oponent)
+        puts "El jugador #{char.name} hace un".colorize(char.color) + " ATAQUE ESPECIAL: '#{action.name}' ".red + "en este turno".colorize(char.color)
+      else
+        puts "La accion #{action} no es reconocida!".colorize(char.color)
+      end
     end
   end
 
+  def welcome_message
+    system "clear"
+    puts "Bienvenido! Este es el tablero inicial!"
+    puts "\n-----------------------------------------------------------------".blue
+    self.board.draw
+    puts "\n-----------------------------------------------------------------".blue
+    puts "Presione ENTER para continuar..."
+    gets
+  end
+
+  def health_bar
+    system "clear"
+    puts "\n-----------------------------------------------------------------".blue
+    print "#{char1.name} health #{char1.health}     ".colorize char1.color
+    puts "#{char2.name} health #{char2.health}".colorize char2.color
+    puts "\n-----------------------------------------------------------------\n".blue
+  end
+
+  def turn actual_char, oponent_char
+    health_bar
+    puts "\n-----------------------------------------------------------------".colorize actual_char.color
+    puts "Turno de #{actual_char.name}".colorize actual_char.color
+    action = actual_char.turn
+    do_action action, actual_char, oponent_char
+    self.board.draw
+    puts "\n-----------------------------------------------------------------\n".colorize actual_char.color
+    sleep 1
+  end
+
+  def winner_message char
+    health_bar
+    puts "GANO #{char.name} !!!!!!!!!!!!!!!!!!!!!".red
+  end
+
   def go!
+    welcome_message
     while true
-      self.board.draw
+      turn self.char1, self.char2
+      if self.char2.health <= 0
+        winner_message char1
+        break
+      end
 
-      action = self.char1.turn
-      do_action action, char1, char2
-      puts "Turno de #{char1.name_test}"
-      puts "Health #{char1.health}"
-
-      action = self.char2.turn
-      do_action action, char2, char1
-      puts "Turno de #{char2.name_test}"
-      puts "Health #{char2.health}"
-
-      sleep 2
-      break if !action || self.char1.health < 0 || self.char2.health < 0
+      turn self.char2, self.char1
+      if self.char1.health <= 0
+        winner_message char2
+        break
+      end
     end
   end
 end

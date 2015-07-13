@@ -22,11 +22,9 @@ class Board
   end
 
   def draw
-    puts "\n-----------------------------------------------------------------"
     @tiles.each do |tile|
       print "[#{tile.to_s}]"
     end
-    puts "\n-----------------------------------------------------------------"
   end
 
   def find_character char

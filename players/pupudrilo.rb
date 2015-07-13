@@ -4,9 +4,15 @@ class Pupudrilo < Dinosaur
   def turn
     tile = self.detect
     if tile && tile.empty?
+      @count = 0
       self.move!
     else
-      self.rotate
+      if @count > 1
+        self.earth_quake!
+      else
+        @count += 1
+        self.rotate
+      end
     end
   end
 end
