@@ -11,7 +11,6 @@ class Pupudrilo < Dinosaur
         self.earth_quake!
       else
         @count += 1
-        self.rotate
         self.roar!
       end
     end
