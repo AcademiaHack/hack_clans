@@ -5,9 +5,9 @@ require_relative 'players/tom_cruise'
 
 engine = Engine.new
 
-char1 = Perrodactilo.new("Perrodactilo", :green, engine)
-# char2 = Pupudrilo.new("Pupudrilo", :yellow, engine)
-char2 = TomCruise.new("Samurai", :yellow, engine)
+#char1 = Perrodactilo.new("Pedro", :green, engine)
+char1 = Pupudrilo.new("Pupudrilo", :yellow, engine)
+char2 = TomCruise.new("Samurai", :green, engine)
 
 engine.init_game char1, char2
 engine.go!

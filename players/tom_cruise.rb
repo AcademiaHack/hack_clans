@@ -6,7 +6,7 @@ class TomCruise < Ninja
     if tile && tile.empty?
       self.rest!
     else
-      self.attack!
+      self.shuriken!
     end
   end
 end

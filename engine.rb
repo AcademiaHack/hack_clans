@@ -3,7 +3,7 @@ require_relative 'board'
 
 class Engine
   attr_accessor :char1, :char2, :board
-  BOARD_LENGTH = 10
+  BOARD_LENGTH = 20
 
   def initialize
     @board = Board.new BOARD_LENGTH
@@ -46,7 +46,7 @@ class Engine
   end
 
   def attack_player char, oponent
-    damage = 10
+    damage = 12
 
     actual_position = self.board.find_character char
     next_postion = actual_position + char.side
