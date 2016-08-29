@@ -1,4 +1,4 @@
-require_relative '../dinosaur'
+require_relative '../characters/dinosaur'
 
 class Pupudrilo < Dinosaur
   def turn

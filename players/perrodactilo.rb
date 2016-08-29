@@ -1,4 +1,4 @@
-require_relative '../dinosaur'
+require_relative '../characters/dinosaur'
 
 class Perrodactilo < Dinosaur
   def turn

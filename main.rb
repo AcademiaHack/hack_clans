@@ -9,8 +9,8 @@ require_relative 'players/mageloco'
 engine = Engine.new
 
 #char1 = Perrodactilo.new("Pedro", :green, engine)
-char1 = Pupudrilo.new("Pupi", :red, engine)
-char2 = TomCruise.new("Samurai", :green, engine)
+player1 = Pupudrilo.new("Humberto", :red, engine)
+player2 = TomCruise.new("Samurai", :green, engine)
 
-engine.init_game char1, char2
+engine.init_game player1, player2
 engine.go!

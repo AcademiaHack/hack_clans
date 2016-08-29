@@ -1,5 +1,5 @@
-require_relative "character"
-require_relative "special_action"
+require_relative "../character"
+require_relative "../special_action"
 
 class Ninja < Character
 

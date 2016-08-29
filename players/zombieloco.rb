@@ -1,4 +1,4 @@
-require_relative '../zombie'
+require_relative '../characters/zombie'
 
 class ZombieLoco < Zombie
   def turn

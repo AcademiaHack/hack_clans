@@ -1,4 +1,4 @@
-require_relative '../ninja'
+require_relative '../characters/ninja'
 
 class NinjaLoco < Ninja
   def turn

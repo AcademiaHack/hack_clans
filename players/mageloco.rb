@@ -1,4 +1,4 @@
-require_relative '../mage'
+require_relative '../characters/mage'
 
 class MagoLoco < Mage
   @@count = 10
