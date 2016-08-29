@@ -18,6 +18,7 @@ class Mage < Character
     SpecialAction.new "go away!", 5, {health: 6, defense: 15, push: 1}
   end
 
-  def brains_eat!
+  def avada_kedavra!
     SpecialAction.new "Avada Kedavra!!", 10, {health: 70, defense: 25, push: 0} 
   end
+end
