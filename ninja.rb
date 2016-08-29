@@ -1,7 +1,7 @@
 require_relative "character"
 require_relative "special_action"
 
-class  Ninja < Character
+class Ninja < Character
 
   def turn
   end

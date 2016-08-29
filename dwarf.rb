@@ -11,7 +11,7 @@ class Dwarf < Character
   end
 
   def pickaxe_throwing!
-    SpecialAction.new "This isn't just for getting gold, you know.", 3, {health:20, defense: 20, push: 0}
+    SpecialAction.new "This isn't just for getting gold, you know. Pickaxe Throwing!!", 3, {health:20, defense: 20, push: 0}
   end
 
   def bom!

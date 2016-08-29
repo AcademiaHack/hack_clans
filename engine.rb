@@ -3,7 +3,7 @@ require_relative 'board'
 
 class Engine
   attr_accessor :char1, :char2, :board
-  BOARD_LENGTH = 20
+  BOARD_LENGTH = 10
 
   def initialize
     @board = Board.new BOARD_LENGTH
